@@ -1,6 +1,7 @@
 package com.cihan.odev12.model;
 
 import java.io.Serializable;
+import java.util.Iterator;
 
 public class UrunStok implements Serializable{
 	private static final long serialVersionUID = -798779737461615977L;
@@ -35,8 +36,19 @@ public class UrunStok implements Serializable{
 		this.birimFiyati = birimFiyati;
 	}
 	public BedenListesi getUrunBeden() {
-		return urunBeden;
+		BedenListesi be = null;
+		for (BedenListesi b :urunBeden.values() )
+		{
+			 if(b.getBedenNo()==this.urunBedenNo)
+			 {
+				 be=b;
+				 break;
+			 }
+		} 
+	    
+	 return be;		
 	}
+	
 	public void setUrunBeden(BedenListesi urunBeden) {
 		this.urunBeden = urunBeden;
 	}

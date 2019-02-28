@@ -115,12 +115,12 @@ public class UrunFrame extends JFrame{
 	    					urunStokListe=urunStokDao.getUrunStok(id[table.getSelectedRow()]);
 	    					String[][] data1 = null;
 	    					data1 = new String[urunStokListe.size()][5];
-	    					String[] columnNames1= {"Ürün Stok NO","Ürün Adı","Ürün Beden No","Ürün Adedi","Birim Fiyatı"};
+	    					String[] columnNames1= {"Ürün Stok NO","Ürün Adı","Ürün Beden","Ürün Adedi","Birim Fiyatı"};
 	    					for (int j = 0; j < urunStokListe.size() ; j++) {
 		    					String urunAdi=urunListe.get(table.getSelectedRow()).getUrunadi();
 		    					data1[j][0]=""+urunStokListe.get(j).getId();
 		    					data1[j][1]=urunAdi;
-		    					data1[j][2]=""+urunStokListe.get(j).getUrunBedenNo();
+		    					data1[j][2]=urunStokListe.get(j).getUrunBedenNo()+" "+urunStokListe.get(j).getUrunBeden() ;
 		    					data1[j][3]=""+urunStokListe.get(j).getAdet();
 		    					data1[j][4]=""+urunStokListe.get(j).getBirimFiyati();
 		    					
