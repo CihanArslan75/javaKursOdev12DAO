@@ -14,11 +14,11 @@ import sun.security.jca.GetInstance;
 import com.cihan.odev12.dao.ConnectionManagerPool;
 
 public class UrunDao {
-	
+	Connection conn=null;
 	public Urun getUrun(Integer id) throws SQLException{
 		Urun urun=new Urun();
 		ConnectionManagerPool mng=ConnectionManagerPool.getInstance();
-		Connection conn=mng.getConnection();
+		conn=mng.getConnection();
 		Statement stmt= conn.createStatement();
 		String sql ="select urunadi, urunrenk, uretimtarihi, urunmarka, id, urunid from urun where id="+id;
 		ResultSet rs = stmt.executeQuery(sql);
@@ -47,7 +47,7 @@ public class UrunDao {
 	
 	public List<Urun>  getUrunList() throws SQLException{
 		ConnectionManagerPool mng= ConnectionManagerPool.getInstance();
-		Connection conn=mng.getConnection();
+		conn=mng.getConnection();
 		Statement stmt = conn.createStatement();
 		String sql="select urunadi, urunrenk, uretimtarihi, urunmarka, id, uruntipiid from urun order by id";
 		ResultSet rs = stmt.executeQuery(sql);

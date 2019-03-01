@@ -9,7 +9,6 @@ public class UrunTipiDao {
 	
 	public String getUrunTipi(Integer id) throws SQLException{
 		String urunTipiAdi = null;
-		
 		ConnectionManagerPool mng = ConnectionManagerPool.getInstance();
 		Connection conn =mng.getConnection();
 		Statement stmt = conn.createStatement();

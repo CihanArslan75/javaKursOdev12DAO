@@ -9,6 +9,7 @@ import javax.swing.JTextField;
 
 import com.cihan.odev12.dao.UserDAO;
 import com.cihan.odev12.model.User;
+import com.cihan.odev12.runner.Runner;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -60,11 +61,13 @@ public class GirisFrame extends JFrame{
 							UrunFrame urun=new UrunFrame();
 							urun.setVisible(true);
 							GirisFrame.this.setVisible(false);
+							Runner.user=user.getId();
 							
 						}
 					} else {
 						JOptionPane.showMessageDialog(GirisFrame.this, "Kullanıcı Yok !!");
 					}
+					
 					
 				} catch (SQLException e1) {
 					e1.printStackTrace();

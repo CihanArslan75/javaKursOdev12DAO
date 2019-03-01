@@ -25,9 +25,12 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.border.BevelBorder;
 import java.awt.Color;
 import javax.swing.JButton;
+import java.awt.event.ActionEvent;
+import java.awt.Font;
 
 public class UrunFrame extends JFrame{
 	private JTable table;
@@ -37,6 +40,8 @@ public class UrunFrame extends JFrame{
 	private JTable table_1;
 	private String[][] dataStok;
 	private JTextField txtUrunStokNo;
+	private Integer idS;
+	private String urunAdi;
 	
 	public UrunFrame() {
 	
@@ -44,7 +49,7 @@ public class UrunFrame extends JFrame{
 	}
 
 	public void urunInitialize() {
-		setTitle("Ürün Listesi");
+		setTitle("Ürünler ve Ürün Stokları Listesi  ");
 		setBounds(100, 100, 1000, 700);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		getContentPane().setLayout(null);
@@ -90,20 +95,22 @@ public class UrunFrame extends JFrame{
 	  
 	    	UrunStokDao urunStokDao=new UrunStokDao();
 			List<UrunStok> urunStokListe=new ArrayList<UrunStok>();
-			
-				//String[][] data1 = null;
-//				urunStokListe=urunStokDao.getUrunStok(id[0]);
-//				data1 = new String[urunStokListe.size()][4];
-//				for (int j = 0; j < urunStokListe.size() ; j++) {
-//					String urunAdi=urunListe.get(0).getUrunadi();
-//					data1[j][0]=urunAdi;
-//					data1[j][1]=""+urunStokListe.get(j).getUrunBedenNo();
-//					data1[j][2]=""+urunStokListe.get(j).getAdet();
-//					data1[j][3]=""+urunStokListe.get(j).getBirimFiyati();
-//					
-//				}
-//				table_1 = new JTable(data1,columnNames1);	
-//				scrollPane_1.setViewportView(table_1);
+		
+				String[][] data1 = null;
+				String[] columnNames1= {"Ürün Stok NO","Ürün Adı","Ürün Beden","Ürün Adedi","Birim Fiyatı"};
+				urunStokListe=urunStokDao.getUrunStok(id[0]);
+				data1 = new String[urunStokListe.size()][5];
+				for (int j = 0; j < urunStokListe.size() ; j++) {
+					urunAdi=urunListe.get(0).getUrunadi();
+					data1[j][0]=""+urunStokListe.get(j).getId();
+					data1[j][1]=urunAdi;
+					data1[j][2]=urunStokListe.get(j).getUrunBedenNo()+" "+urunStokListe.get(j).getUrunBeden() ;
+					data1[j][3]=""+urunStokListe.get(j).getAdet();
+					data1[j][4]=""+urunStokListe.get(j).getBirimFiyati();
+					
+				}
+				table_1 = new JTable(data1,columnNames1);	
+				scrollPane_1.setViewportView(table_1);
 	    	
 	    	    table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 	    	    @Override
@@ -112,12 +119,13 @@ public class UrunFrame extends JFrame{
 	    	        	UrunStokDao urunStokDao=new UrunStokDao();
 	    				List<UrunStok> urunStokListe=new ArrayList<UrunStok>();
 	    				try {
+	    					idS=id[table.getSelectedRow()];
 	    					urunStokListe=urunStokDao.getUrunStok(id[table.getSelectedRow()]);
 	    					String[][] data1 = null;
 	    					data1 = new String[urunStokListe.size()][5];
-	    					String[] columnNames1= {"Ürün Stok NO","Ürün Adı","Ürün Beden","Ürün Adedi","Birim Fiyatı"};
+	    					
 	    					for (int j = 0; j < urunStokListe.size() ; j++) {
-		    					String urunAdi=urunListe.get(table.getSelectedRow()).getUrunadi();
+		    					urunAdi=urunListe.get(table.getSelectedRow()).getUrunadi();
 		    					data1[j][0]=""+urunStokListe.get(j).getId();
 		    					data1[j][1]=urunAdi;
 		    					data1[j][2]=urunStokListe.get(j).getUrunBedenNo()+" "+urunStokListe.get(j).getUrunBeden() ;
@@ -153,33 +161,6 @@ public class UrunFrame extends JFrame{
 			e.printStackTrace();
 		}
 		
-				
-		
-		txtAdet.setBounds(123, 349, 104, 22);
-		getContentPane().add(txtAdet);
-		txtAdet.setColumns(10);
-		
-		
-		txtBFiyat.setBounds(123, 389, 104, 22);
-		getContentPane().add(txtBFiyat);
-		txtBFiyat.setColumns(10);
-		
-		JLabel lblBirimFiyat = new JLabel("Birim Fiyatı : ");
-		lblBirimFiyat.setBounds(28, 392, 83, 16);
-		getContentPane().add(lblBirimFiyat);
-		
-		JLabel lblAdedi = new JLabel("Adedi :");
-		lblAdedi.setBounds(26, 352, 56, 16);
-		getContentPane().add(lblAdedi);
-		
-		JButton btnStokUpdate = new JButton("Stok Değiştir ");
-		btnStokUpdate.setBounds(289, 324, 183, 25);
-		getContentPane().add(btnStokUpdate);
-		
-		JButton btnStokDelete = new JButton("Stok Sil");
-		btnStokDelete.setBounds(289, 364, 183, 25);
-		getContentPane().add(btnStokDelete);
-		
 		JLabel lblStokNo = new JLabel("Ürün Stok No");
 		lblStokNo.setBounds(22, 311, 89, 16);
 		getContentPane().add(lblStokNo);
@@ -188,7 +169,115 @@ public class UrunFrame extends JFrame{
 		txtUrunStokNo.setEditable(false);
 		txtUrunStokNo.setBounds(123, 308, 104, 22);
 		getContentPane().add(txtUrunStokNo);
-		txtUrunStokNo.setColumns(10);
+		txtUrunStokNo.setColumns(10);		
+		
+		JLabel lblAdedi = new JLabel("Adedi :");
+		lblAdedi.setBounds(26, 352, 56, 16);
+		getContentPane().add(lblAdedi);
+		
+		txtAdet.setBounds(123, 349, 104, 22);
+		getContentPane().add(txtAdet);
+		txtAdet.setColumns(10);
+		
+		JLabel lblBirimFiyat = new JLabel("Birim Fiyatı : ");
+		lblBirimFiyat.setBounds(28, 392, 83, 16);
+		getContentPane().add(lblBirimFiyat);
+		
+		txtBFiyat.setBounds(123, 389, 104, 22);
+		getContentPane().add(txtBFiyat);
+		txtBFiyat.setColumns(10);
+		
+		JButton btnStokUpdate = new JButton("Stok Değiştir ");
+		btnStokUpdate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UrunStokDao urunStokDao = new UrunStokDao();
+		        List<Integer> urunStokListe=new ArrayList<Integer>();
+		        urunStokListe.add(Integer.parseInt(txtUrunStokNo.getText()));
+		        urunStokListe.add(Integer.parseInt(txtAdet.getText()));
+		        urunStokListe.add(Integer.parseInt(txtBFiyat.getText()));
+				try {
+					String mesaj=urunStokDao.urunStokUpdate(urunStokListe);
+					JOptionPane.showMessageDialog(UrunFrame.this, mesaj);
+					table_1.removeAll();
+					table_1.repaint();
+					txtAdet.setText("");
+					txtBFiyat.setText("");
+					txtUrunStokNo.setText("");
+					String[][] data1 = null;
+					String[] columnNames1= {"Ürün Stok NO","Ürün Adı","Ürün Beden","Ürün Adedi","Birim Fiyatı"};
+					List<UrunStok> urunStokListe1=urunStokDao.getUrunStok(idS);
+					data1 = new String[urunStokListe1.size()][5];
+					for (int j = 0; j < urunStokListe1.size() ; j++) {
+						data1[j][0]=""+urunStokListe1.get(j).getId();
+						data1[j][1]=urunAdi;
+						data1[j][2]=urunStokListe1.get(j).getUrunBedenNo()+" "+urunStokListe1.get(j).getUrunBeden() ;
+						data1[j][3]=""+urunStokListe1.get(j).getAdet();
+						data1[j][4]=""+urunStokListe1.get(j).getBirimFiyati();
+						
+					}
+					table_1 = new JTable(data1,columnNames1);	
+					scrollPane_1.setViewportView(table_1);
+
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+					JOptionPane.showMessageDialog(UrunFrame.this, "SQL çalıştırılırken Hata Oluştu ");
+				}
+				
+			}
+		});
+		btnStokUpdate.setBounds(289, 324, 183, 25);
+		getContentPane().add(btnStokUpdate);
+		
+		JButton btnStokDelete = new JButton("Stok Sil");
+		btnStokDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UrunStokDao urunStokDao = new UrunStokDao();
+		        try {
+					String mesaj=urunStokDao.urunStokDelete(Integer.parseInt(txtUrunStokNo.getText()));
+					JOptionPane.showMessageDialog(UrunFrame.this, mesaj);
+					table_1.removeAll();
+					table_1.repaint();
+					txtAdet.setText("");
+					txtBFiyat.setText("");
+					txtUrunStokNo.setText("");
+			     	String[][] data1 = null;
+					String[] columnNames1= {"Ürün Stok NO","Ürün Adı","Ürün Beden","Ürün Adedi","Birim Fiyatı"};
+					List<UrunStok> urunStokListe1=urunStokDao.getUrunStok(idS);
+					data1 = new String[urunStokListe1.size()][5];
+					for (int j = 0; j < urunStokListe1.size() ; j++) {
+						data1[j][0]=""+urunStokListe1.get(j).getId();
+						data1[j][1]=urunAdi;
+						data1[j][2]=urunStokListe1.get(j).getUrunBedenNo()+" "+urunStokListe1.get(j).getUrunBeden() ;
+						data1[j][3]=""+urunStokListe1.get(j).getAdet();
+						data1[j][4]=""+urunStokListe1.get(j).getBirimFiyati();
+						
+					}
+					table_1 = new JTable(data1,columnNames1);	
+					scrollPane_1.setViewportView(table_1);
+					
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+					JOptionPane.showMessageDialog(UrunFrame.this, "SQL çalıştırılırken Hata Oluştu ");
+				}
+				
+			}
+		});
+					
+		btnStokDelete.setBounds(289, 364, 183, 25);
+		getContentPane().add(btnStokDelete);
+		
+		JLabel lblrnStokDetayi = new JLabel("ÜRÜN STOK DETAYI ");
+		lblrnStokDetayi.setForeground(Color.RED);
+		lblrnStokDetayi.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblrnStokDetayi.setBounds(12, 182, 215, 16);
+		getContentPane().add(lblrnStokDetayi);
+		
+		JLabel lblrnListesi = new JLabel("ÜRÜN LİSTESİ");
+		lblrnListesi.setForeground(Color.RED);
+		lblrnListesi.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblrnListesi.setBounds(12, 8, 183, 16);
+		getContentPane().add(lblrnListesi);
+		
 		
 		
 	}
